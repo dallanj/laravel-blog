@@ -1,0 +1,16 @@
+body {
+    background:tan;
+    color:white;
+    max-width:65ch;
+    margin:auto;
+}
+a {
+    text-decoration: none;
+    color:inherit;
+}
+
+article + article {
+    margin-top:3rem;
+    border-top:1px solid #ccc;
+    padding-top:2rem;
+}
