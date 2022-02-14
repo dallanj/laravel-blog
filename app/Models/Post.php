@@ -2,70 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\File;
-use Spatie\YamlFrontMatter\YamlFrontMatter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Post
+class Post extends Model
 {
-    public $title;
-    public $excerpt;
-    public $date;
-    public $body;
-    public $slug;
+    use HasFactory;
 
-    public function __construct($title,$excerpt,$date,$body,$slug)
-    {
-        $this->title = $title;
-        $this->excerpt = $excerpt;
-        $this->date = $date;
-        $this->body = $body;
-        $this->slug = $slug;
-    }
+    // adding this line is good for security
+    // prevents users from adding more in a query
+    // such as changing their account status to admin 
+    // or changing the id
+    // MASS ASSIGNMENT VULNERBILITY
 
-    public static function all()
-    {
-        return cache()->rememberForever('posts.all',function() {
-            return collect(File::files(resource_path("posts")))
+    // this will except anything other than id
+    protected $guarded = ['id'];
 
-            ->map(fn($file) => YamlFrontMatter::parseFile($file))
-
-            ->map(fn($document) => new Post(
-                $document->title,
-                $document->excerpt,
-                $document->date,
-                $document->body(),
-                $document->slug
-            ))
-            ->sortByDesc('date');
-        });
-        
-    }
-
-    public static function find($slug)
-    {
-        // of all the blog posts, find the one with a slug that matches the one that was requested
-        return static::all()->firstWhere('slug',$slug);    
-    }
-    
-    /**
-     * findOrFail
-     * Checks if file exists
-     * returns data, if data is null, direct to 404 page
-     *
-     * @param  mixed $slug
-     * @return void
-     */
-    public static function findOrFail($slug)
-    {
-        $post = static::find($slug);
-
-        if(! $post) {
-            throw new ModelNotFoundException();
-        }
-
-        return $post;
-
-    }
-
+    // this will not allow anything except title, excerpt, body
+    protected $fillable = ['title', 'excerpt', 'body'];
 }

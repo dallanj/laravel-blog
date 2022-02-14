@@ -22,10 +22,10 @@ Route::get('/', function () {
 });
 
 // pass a uri slug to route/view
-Route::get('posts/{post}', function($slug) {
+Route::get('posts/{post}', function($id) {
 
     // find a post by its slug and pass it to a view called 'post'
-    $post = Post::findOrFail($slug);
+    $post = Post::findOrFail($id);
 
     // pass the html file to the view
     return view('post', [
