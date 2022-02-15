@@ -1,6 +1,6 @@
 <!doctype html>
 <link rel="stylesheet" href="/app.css">
-<script src="/app.js"></script>
+<!-- <script src="/app.js"></script> -->
 <title>Post</title>
 
 <body>
