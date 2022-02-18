@@ -26,7 +26,8 @@ Route::get('/', function () {
     // to fix the n+1 issue(doing a sql query search for each post)
     // change Post::all() to Post::with('category')->get()
     return view('posts', [
-        'posts' => Post::latest()->get()
+        'posts' => Post::latest()->get(),
+        'header' => 'Blog Posts'
     ]);
 });
 
@@ -38,7 +39,8 @@ Route::get('posts/{post:slug}', function(Post $post) {
 
     // pass the html file to the view
     return view('post', [
-        'post' => $post
+        'post' => $post,
+        'header' => $post->title
     ]);
 
     // use where to add constraint
@@ -47,13 +49,15 @@ Route::get('posts/{post:slug}', function(Post $post) {
 Route::get('categories/{category:slug}', function (Category $category) {
 
     return view('posts', [
-        'posts' => $category->posts
+        'posts' => $category->posts,
+        'header' => $category->name
     ]);
 });
 
 Route::get('authors/{author:username}', function (User $author) {
 
     return view('posts', [
-        'posts' => $author->posts
+        'posts' => $author->posts,
+        'header' => $author->name
     ]);
 });

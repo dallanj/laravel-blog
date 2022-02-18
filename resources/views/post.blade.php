@@ -1,20 +1,30 @@
 <x-layout>
-    <article>
-        <h1>{{ $post->title }}</h1>
 
-        <h3>
-            By
-            <a href="/authors/{{ $post->author->username }}">{{ $post->author->name }}</a>
-            in 
-            <a href="/categories/{{ $post->category->slug }}">
-                {{ $post->category->name }}
-            </a>
-        </h3>
+    <main class="p-4 sm:p-0">
+        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            
+            <a class="bread-crumb" href="/">< BACK TO BLOG</a>
 
-        <div>
-            {!! $post->body !!}
+            <article class="post-container">
+
+                <h1 class="text-5xl font-bold text-gray-900 pb-6">{{ $post->title }}</h1>
+
+                <p class="blog-posts-author">
+                    By
+                    <a href="/authors/{{ $post->author->username }}">{{ $post->author->name }}</a>
+                    in 
+                    <a href="/categories/{{ $post->category->slug }}">
+                        {{ $post->category->name }}
+                    </a>
+                    on
+                    {{ date('F d, Y', strtotime($post->created_at)) }}
+                </p>
+
+                <div>
+                    {!! $post->body !!}
+                </div>
+            </article>
+
         </div>
-    </article>
-
-    <a href="/">Go back</a>
+    </main>
 </x-layout>
