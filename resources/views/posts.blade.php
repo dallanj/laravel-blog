@@ -1,49 +1,76 @@
-<?php
-// another method of using yield layouts
-// @extends ('layout')
-
-// @section('content')
-//     @foreach($posts as $post)
-//         <article class="{{ $loop->even ? 'bg-gray' : '' }}">   
-//             <h1>
-//                 <a href="./posts/{{ $post->slug }}">
-//                     {{ $post->title }}
-//                 </a>
-//             </h1> 
-            
-//             <p>{{ $post->excerpt }}</p>
-//         </article> 
-//     @endforeach
-// @endsection
-?>
-
-
-
 <x-layout>
     
     @include ('_blog-header')
 
     <main>
-        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto p-4 py-6 sm:px-6 lg:px-8">
             
+            <!-- category list -->
+            <aside class="mb-6">
+                <ul class="flex gap-2 flex-wrap">
+                    @if (isset($currentCategory))
+                        <a href="../blog">
+                            <li 
+                            class="category-tab-bg p-1 rounded-md drop-shadow-lg category-tab-bg-notactive"
+                            >
+                                <strong>SHOW ALL</strong>       
+                            </li>
+                        </a>
+                    @else
+                        <li 
+                        class="category-tab-bg p-1 rounded-md drop-shadow-lg category-tab-bg-active"
+                        >   
+                            <strong>SHOW ALL</strong>       
+                        </li>
+                    @endif
+                    
+                    @foreach ($categories as $category)
+                        @if (isset($currentCategory) && $currentCategory->name == $category->name)
+                            <li 
+                            class="category-tab-bg p-1 rounded-md drop-shadow-lg category-tab-bg-active"
+                            >   
+                                <strong>{{ strtoupper($category->name) }}</strong>       
+                            </li>
+                        @else
+                            <a href="/blog/?category={{ $category->slug }}">
+                                <li 
+                                class="category-tab-bg p-1 rounded-md drop-shadow-lg category-tab-bg-notactive"
+                                >
+                                    <strong>{{ strtoupper($category->name) }}</strong>       
+                                </li>
+                            </a>
+                        @endif
+                    @endforeach
+                </ul>
+            </aside>
+
             <div class="flex">
                 <div class="form-floating mb-3 xl:w-96">
-                <label for="searchField" class="sr-only">Email address</label>
-                    <input type="text" class="form-control
-                    block
-                    w-full
-                    px-3
-                    py-1.5
-                    text-base
-                    font-normal
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded
-                    transition
-                    ease-in-out
-                    m-0
-                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="searchField" placeholder="Search blog posts">
+                    <form method="GET" action="#">
+                        <label for="search" class="sr-only">Search for blog posts</label>
+                        <input 
+                            name="search"
+                            type="text" 
+                            class="form-control
+                                block
+                                w-full
+                                px-3
+                                py-1.5
+                                text-base
+                                font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                id="search" 
+                                placeholder="Search blog posts"
+                                value="{{ request('search') }}"
+                            >
+                    </form>
                 </div>
             </div>
 

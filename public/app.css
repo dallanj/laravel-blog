@@ -44,6 +44,19 @@ article + article {
     color:#999;
 }
 
+.category-tab-bg {
+    color: white;
+}
+.category-tab-bg-notactive {
+    background-color:#fbb03b;
+}
+.category-tab-bg-active {
+    background:#F09605;
+}
+.category-tab-bg-notactive:hover {
+    background-color: #FCC266;
+}
+
 /* Specific blog post page */
 .post-title {
     font-size:2rem;

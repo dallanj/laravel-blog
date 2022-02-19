@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
@@ -18,46 +19,31 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-    // this logs queries on the page in storage/logs/laravel.log
-    // \Illuminate\Support\Facades\DB::listen(function($query) {
-    //     logger($query->sql,$query->bindings);
-    // });
+    return view('home', [
 
-    // to fix the n+1 issue(doing a sql query search for each post)
-    // change Post::all() to Post::with('category')->get()
-    return view('posts', [
-        'posts' => Post::latest()->get(),
-        'header' => 'Blog Posts'
     ]);
 });
+
+Route::get('blog/', [PostController::class, 'index'])->name('home');
 
 // pass a uri slug to route/view
-Route::get('posts/{post:slug}', function(Post $post) {
+Route::get('posts/{post:slug}', [PostController::class, 'show']);
 
-    // find a post by its slug and pass it to a view called 'post'
-    // $post = Post::findOrFail($id);
+// Route::get('categories/{category:slug}', function (Category $category) {
 
-    // pass the html file to the view
-    return view('post', [
-        'post' => $post,
-        'header' => $post->title
-    ]);
-
-    // use where to add constraint
-});
-
-Route::get('categories/{category:slug}', function (Category $category) {
-
-    return view('posts', [
-        'posts' => $category->posts,
-        'header' => $category->name
-    ]);
-});
+//     return view('posts', [
+//         'posts' => $category->posts,
+//         'header' => $category->name,
+//         'currentCategory' => $category,
+//         'categories' => Category::all()
+//     ]);
+// });
 
 Route::get('authors/{author:username}', function (User $author) {
 
     return view('posts', [
         'posts' => $author->posts,
-        'header' => $author->name
+        'header' => $author->name,
+        'categories' => Category::all()
     ]);
 });
