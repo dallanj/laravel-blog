@@ -1,52 +1,23 @@
 <x-layout>
     
-    @include ('_blog-header')
+    @include ('posts._header')
 
     <main>
         <div class="max-w-7xl mx-auto p-4 py-6 sm:px-6 lg:px-8">
             
             <!-- category list -->
             <aside class="mb-6">
-                <ul class="flex gap-2 flex-wrap">
-                    @if (isset($currentCategory))
-                        <a href="../blog">
-                            <li 
-                            class="category-tab-bg p-1 rounded-md drop-shadow-lg category-tab-bg-notactive"
-                            >
-                                <strong>SHOW ALL</strong>       
-                            </li>
-                        </a>
-                    @else
-                        <li 
-                        class="category-tab-bg p-1 rounded-md drop-shadow-lg category-tab-bg-active"
-                        >   
-                            <strong>SHOW ALL</strong>       
-                        </li>
-                    @endif
-                    
-                    @foreach ($categories as $category)
-                        @if (isset($currentCategory) && $currentCategory->name == $category->name)
-                            <li 
-                            class="category-tab-bg p-1 rounded-md drop-shadow-lg category-tab-bg-active"
-                            >   
-                                <strong>{{ strtoupper($category->name) }}</strong>       
-                            </li>
-                        @else
-                            <a href="/blog/?category={{ $category->slug }}">
-                                <li 
-                                class="category-tab-bg p-1 rounded-md drop-shadow-lg category-tab-bg-notactive"
-                                >
-                                    <strong>{{ strtoupper($category->name) }}</strong>       
-                                </li>
-                            </a>
-                        @endif
-                    @endforeach
-                </ul>
+                <x-category-list />
             </aside>
 
             <div class="flex">
                 <div class="form-floating mb-3 xl:w-96">
-                    <form method="GET" action="#">
+                    <form method="GET" action="/blog/">
+                    
+                        @if (request('category'))
+                            <input type="hidden" name="category" value="{{ request('category') }}"/>
+                        @endif
+                    
                         <label for="search" class="sr-only">Search for blog posts</label>
                         <input 
                             name="search"
@@ -97,9 +68,9 @@
                     <!-- author/category -->
                     <p class="blog-posts-author">
                         By
-                        <a href="/authors/{{ $post->author->username }}">{{ $post->author->name }}</a>
+                        <a href="/blog/?author={{ $post->author->username }}">{{ $post->author->name }}</a>
                         in
-                        <a href="/categories/{{ $post->category->slug }}">
+                        <a href="/blog/?category={{ $post->category->slug }}">
                             {{ $post->category->name }}
                         </a>
                     </p>

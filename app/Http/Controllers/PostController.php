@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Http\Livewire\Frontpage;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {    
@@ -16,11 +18,16 @@ class PostController extends Controller
     public function index()
     {
 
-       return view('posts', [
-            'posts' => Post::latest()->filter(request(['search', 'category']))->get(),
-            'header' => 'All',
-            'categories' => Category::all(),
-            'currentCategory' => Category::firstWhere('slug', request('category'))
+        $category = Category::firstWhere('slug', request('category'));
+        
+        if(!$category) {
+            $category = ['name' => 'All'];
+            // $category->name = 'All';
+        }
+
+       return view('posts.index', [
+            'posts' => Post::latest()->filter(request(['search', 'category', 'author']))->get(),
+            'header' => $category
         ]);
     }
     
@@ -36,7 +43,7 @@ class PostController extends Controller
         // $post = Post::findOrFail($id);
 
         // pass the html file to the view
-        return view('post', [
+        return view('posts.show', [
             'post' => $post,
             'header' => $post->title
         ]);

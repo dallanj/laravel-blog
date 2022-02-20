@@ -11,9 +11,9 @@
 
                 <p class="blog-posts-author">
                     By
-                    <a href="/authors/{{ $post->author->username }}">{{ $post->author->name }}</a>
+                    <a href="/blog/?author={{ $post->author->username }}">{{ $post->author->name }}</a>
                     in 
-                    <a href="/categories/{{ $post->category->slug }}">
+                    <a href="/blog/?category={{ $post->category->slug }}">
                         {{ $post->category->name }}
                     </a>
                     on
